@@ -7,12 +7,12 @@
 
 ## Setup
 First, clone the repository:
-```python
+```bash
 cd /local/path/for/clone
 git clone https://github.com/gilikn/FacePipe.git
 ```
 Install requirements:
-```python
+```bash
 pip install requirements.txt
 ```
 Run the main script with the relevant paths to your videos:
