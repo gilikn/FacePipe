@@ -18,7 +18,7 @@ pip install requirements.txt
 ```
 
 Run the main script with the relevant paths to your videos:
-```python
+```
 python main_face_tracking_pipeline.py
     --base_directory_path /path/to/your/dataset 
     --mean_face_path /path/to/20words_mean_face.npy
