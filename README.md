@@ -7,13 +7,13 @@
 
 ## Setup
 First, clone the repository:
-```bash
+```
 cd /local/path/for/clone
 git clone https://github.com/gilikn/FacePipe.git
 ```
 
 Install requirements:
-```bash
+```
 pip install requirements.txt
 ```
 
