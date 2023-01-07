@@ -1,5 +1,5 @@
 <div align="center">
-<img src="images/facepipe_logo.svg" alt="logo" width=300></img>
+<img src="facepipe/images/facepipe_logo.svg" alt="logo" width=300></img>
 </div>
 
 <!-- # FakeOut -->
