@@ -8,7 +8,6 @@ ENLARGE_SCALAR = 1.8
 HORIZONTAL_MEAN_FACE_INDENT = -17.05
 VERTICAL_MEAN_FACE_INDENT = 5
 MAX_FACES = 2
-MEAN_FACE_PATH = '/mnt/raid1/home/gili_knn/20words_mean_face.npy'
 stablePntsIDs = [33, 36, 39, 42, 45]
 mediapipePntsIds = [2, 130, 243, 463, 359]
 STD_SIZE = (224, 224)

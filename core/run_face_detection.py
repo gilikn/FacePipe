@@ -10,9 +10,10 @@ import torch
 from imutils.video import FileVideoStream
 from tqdm import tqdm
 
-from facepipe.model.fast_mtcnn import FastMTCNN
+from facepipe.config.pre_processing_config import CROP_DIRECTORY, AUDIO_DIRECTORY, ENLARGE_SCALAR, BASE_THRESHOLD, \
+    MAX_FACES
 from facepipe.core.mediapipe_funcs import media_pipe_preprocess_video
-from facepipe.config.pre_processing_config import CROP_DIRECTORY, AUDIO_DIRECTORY, ENLARGE_SCALAR, BASE_THRESHOLD, MAX_FACES
+from facepipe.model.fast_mtcnn import FastMTCNN
 
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
@@ -225,7 +226,7 @@ def crop_frame(file_path, bounding_boxes, write_y1, write_y2, write_x1, write_x2
 
 
 def face_crop_multiple(directory_path, file_name, bounding_boxes, multi_face_mode, avg_most_conf, input_path,
-                       detector):
+                       detector, mean_face_path):
     """
     :param directory_path: The base path of the working directory.
     :param file_name: The name of the file processed.
@@ -234,6 +235,7 @@ def face_crop_multiple(directory_path, file_name, bounding_boxes, multi_face_mod
     :param avg_most_conf: Average size of the face detected most confidently.
     :param input_path: The path to the processed file.
     :param detector: The detector object (e.g. MediaPipe's FaceMesh).
+    :param mean_face_path: Path to the mean face used in alignment process for reference.
     :return: None. Processed video is saved in the CROP_DIRECTORY under directory_path.
     """
     try:
@@ -270,7 +272,7 @@ def face_crop_multiple(directory_path, file_name, bounding_boxes, multi_face_mod
                 last_coordinates = (write_x1, write_x2, write_y1, write_y2)
             video_capture.release()
             cropped_frames = crop_frame(file_path, bounding_boxes, write_y1, write_y2, write_x1, write_x2)
-            media_pipe_preprocess_video(output_video, detector=detector, frames=cropped_frames, fps=fps)
+            media_pipe_preprocess_video(output_video, mean_face_path, detector=detector, frames=cropped_frames, fps=fps)
             finish_crop(video_capture)
         return
     except Exception as e:
@@ -325,13 +327,14 @@ def finish_crop(video_capture):
     return
 
 
-def face_crop(directory_path, file_name, bounding_boxes, input_path, detector):
+def face_crop(directory_path, file_name, bounding_boxes, input_path, detector, mean_face_path):
     """
     :param directory_path: The base path of the working directory.
     :param file_name: The name of the file processed.
     :param bounding_boxes: List of bounding boxes detected.
     :param input_path: The path to the processed file.
     :param detector: The detector object (e.g. MediaPipe's FaceMesh).
+    :param mean_face_path: Path to the mean face used in alignment process for reference.
     :return: None. Processed video is saved in the CROP_DIRECTORY under directory_path.
     """
     try:
@@ -341,7 +344,7 @@ def face_crop(directory_path, file_name, bounding_boxes, input_path, detector):
             multi_faces_mode = count_faces_in_video(bounding_boxes, avg_most_conf)
             if multi_faces_mode > 1:
                 return face_crop_multiple(directory_path, file_name, bounding_boxes, multi_faces_mode,
-                                          avg_most_conf, input_path, detector=detector)
+                                          avg_most_conf, input_path, detector=detector, mean_face_path=mean_face_path)
 
             video_capture, vid_width, vid_height, length, fps = get_video_metadata(file_path)
             output_video = os.path.join(directory_path, CROP_DIRECTORY, f"{file_name}")
@@ -369,14 +372,14 @@ def face_crop(directory_path, file_name, bounding_boxes, input_path, detector):
 
             video_capture.release()
             cropped_frames = crop_frame(file_path, bounding_boxes, write_y1, write_y2, write_x1, write_x2)
-            media_pipe_preprocess_video(output_video, detector=detector, frames=cropped_frames, fps=fps)
+            media_pipe_preprocess_video(output_video, mean_face_path, detector=detector, frames=cropped_frames, fps=fps)
             finish_crop(video_capture)
         return
     except Exception as e:
         logging.warning(f'Failed face crop due to {e}')
 
 
-def run_face_detection_pipeline(directory_path, input_path=None):
+def run_face_detection_pipeline(directory_path, mean_face_path, input_path=None):
     """
     :param directory_path: Processed data destination path.
     :param input_path: Input data path.
@@ -403,7 +406,8 @@ def run_face_detection_pipeline(directory_path, input_path=None):
             file_path = os.path.join(input_path, file_name)
             try:
                 bounding_boxes[file_name] = run_detection(detector, file_path)
-                face_crop(directory_path, file_name, bounding_boxes[file_name], input_path, detector=face_mesh)
+                face_crop(directory_path, file_name, bounding_boxes[file_name], input_path, detector=face_mesh,
+                          mean_face_path=mean_face_path)
             except Exception as e:
                 logging.warning(f'Failed due to {e}')
     logging.warning('Face crop time:', datetime.datetime.now() - start_time)

@@ -102,7 +102,7 @@ def landmarks_interpolate(landmarks):
     return landmarks
 
 
-def media_pipe_preprocess_video(output_video_path, detector=None, frames=None, fps=30):
+def media_pipe_preprocess_video(output_video_path, mean_face_path, detector=None, frames=None, fps=30):
     last_bounding_boxes = {}
     landmarks = defaultdict(list)
     face_heat_map = np.zeros((len(frames), MAX_FACES))
@@ -138,7 +138,7 @@ def media_pipe_preprocess_video(output_video_path, detector=None, frames=None, f
 
     offset, landmarks_i = canonize_faces_by_frame(face_heat_map, landmarks, create_offset=False)
     preprocessed_landmarks = landmarks_interpolate(landmarks_i)
-    rois = new_crop_patch(frames, preprocessed_landmarks, offset=offset)
+    rois = new_crop_patch(frames, preprocessed_landmarks, mean_face_path, offset=offset)
     write_video_cv(rois, f"{output_video_path}", fps)
     return rois, preprocessed_landmarks, offset
 
@@ -158,12 +158,12 @@ def apply_transform(transform, img, std_size):
     return warped
 
 
-def new_crop_patch(frames, landmarks, offset=0):
+def new_crop_patch(frames, landmarks, mean_face_path, offset=0):
     """Crop mouth patch
     :param str video_pathname: pathname for the video_dieo
     :param list landmarks: interpolated landmarks
     """
-    mean_face_landmarks = load_and_normalize_mean_face(MEAN_FACE_PATH)
+    mean_face_landmarks = load_and_normalize_mean_face(mean_face_path)
     frames = frames[offset:]
     num_frames = len(frames)
     frame_idx = 0

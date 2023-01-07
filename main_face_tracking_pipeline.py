@@ -15,6 +15,8 @@ flags.DEFINE_string('cropped_directory_name', CROP_DIRECTORY,
                     'Name of directory in which cropped (silent) videos will be saved.')
 flags.DEFINE_string('audio_directory_name', AUDIO_DIRECTORY,
                     'Name of directory in which cropped videos will be saved with audio.')
+flags.DEFINE_string('mean_face_path', '', 'reference mean face (download from: '
+                                     'https://github.com/mpc001/Lipreading_using_Temporal_Convolutional_Networks/blob/master/preprocessing/20words_mean_face.npy)')
 
 FLAGS = flags.FLAGS
 
@@ -25,9 +27,9 @@ def main(argv):
     logging.root.setLevel(logging.NOTSET)
     directory_path = FLAGS.base_directory_path
     videos_dir_path = os.path.join(directory_path, ORIGINAL_DIRECTORY)
-    subprocess.call(f'mkdir {CROP_DIRECTORY}', cwd=directory_path, shell=True)
-    subprocess.call(f'mkdir {AUDIO_DIRECTORY}', cwd=directory_path, shell=True)
-    run_face_detection_pipeline(directory_path, videos_dir_path)
+    subprocess.call(f'mkdir {FLAGS.cropped_directory_name}', cwd=directory_path, shell=True)
+    subprocess.call(f'mkdir {FLAGS.audio_directory_name}', cwd=directory_path, shell=True)
+    run_face_detection_pipeline(directory_path, FLAGS.mean_face_path, videos_dir_path)
     add_audio_pipeline(directory_path, videos_dir_path)
 
 
