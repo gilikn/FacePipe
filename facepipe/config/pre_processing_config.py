@@ -10,3 +10,4 @@ stablePntsIDs = [33, 36, 39, 42, 45]
 mediapipePntsIds = [2, 130, 243, 463, 359]
 STD_SIZE = (224, 224)
 WINDOW_MARGIN = 5
+MEAN_FACE_DOWNLOAD_URL = "https://github.com/mpc001/Lipreading_using_Temporal_Convolutional_Networks/blob/master/preprocessing/20words_mean_face.npy"
