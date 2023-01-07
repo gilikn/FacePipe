@@ -27,7 +27,7 @@ python main_face_tracking_pipeline.py
 Finally, you can view your results in the directories defined for results, under the base_directory_path parameter.
 
 ## BibTex
-If you find <i>FakePipe</i> useful for your research, please cite the <i>FakeOut</i> paper:
+If you find <i>FacePipe</i> useful for your research, please cite the <i>FakeOut</i> paper:
 ```bib
 @article{knafo2022fakeout,
   title={FakeOut: Leveraging Out-of-domain Self-supervision for Multi-modal Video Deepfake Detection},
