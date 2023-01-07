@@ -23,7 +23,7 @@ python main_face_tracking_pipeline.py
 ```
 
 ## BibTex
-If you find <i>FakePipe</i> useful for your research, please cite the FakeOut paper:
+If you find <i>FakePipe</i> useful for your research, please cite the <i>FakeOut</i> paper:
 ```bib
 @article{knafo2022fakeout,
   title={FakeOut: Leveraging Out-of-domain Self-supervision for Multi-modal Video Deepfake Detection},
