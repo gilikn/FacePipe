@@ -10,6 +10,7 @@ First, clone the repository:
 ```
 cd /local/path/for/clone
 git clone https://github.com/gilikn/FacePipe.git
+cd FacePipe
 ```
 
 Install requirements:
