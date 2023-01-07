@@ -13,7 +13,7 @@ import torchvision.ops.boxes as bops
 from skimage import transform as tf
 
 from facepipe.config.pre_processing_config import HORIZONTAL_MEAN_FACE_INDENT, VERTICAL_MEAN_FACE_INDENT, \
-    MAX_FACES, STD_SIZE, stablePntsIDs, mediapipePntsIds, MEAN_FACE_PATH, WINDOW_MARGIN
+    MAX_FACES, STD_SIZE, stablePntsIDs, mediapipePntsIds, WINDOW_MARGIN
 
 
 def arrayed(landmarks, orig_width, orig_height):
