@@ -5,6 +5,14 @@
 <!-- # FakeOut -->
 # FacePipe: The Official Implementation of the Face Tracking Pipeline of [FakeOut](https://github.com/gilikn/FakeOut)
 
+<div align="center">
+<img src="/facepipe/images/face_tracking_pipeline.png" alt="logo" width=700></img>
+</div>
+
+<i>FacePipe</i> consists of a few main stages. First, face bounding boxes are detected using MTCNN. Then, landmarks of each face in the bounding boxes are detected using MediaPipe. Irrelevant faces are filtered out based on our logic to handle crowded background scenarios and distractors. Then, each relevant face is aligned using the detected landmarks and the reference mean face. 
+
+Despite the challenging multi-person synthetic distractors, <i>FacePipe</i> successfully outputs two sequences of the aligned relevant faces.
+
 ## Setup
 First, clone the repository:
 ```
